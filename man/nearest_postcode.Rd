@@ -38,6 +38,6 @@ in \code{df2} using Euclidean distance on latitude/longitude.
 }
 \examples{
 df1 <- data.frame(postcode = "B1 1BB")
-df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD", "B21 8BQ")
+df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD", "B21 8BQ"))
 nearest_postcode(df1, df2, n = 2)
 }

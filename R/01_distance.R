@@ -32,7 +32,7 @@ join_postcode_info <- function(
   if (strip) {
     # Remove all except postcode column
     df <- df %>%
-      select(dplyr::all_of(df_pc_col))
+      dplyr::select(dplyr::all_of(df_pc_col))
   }
 
   data("wm_postcodes", envir = environment())
