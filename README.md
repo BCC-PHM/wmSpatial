@@ -34,6 +34,22 @@ Returns:
 postcode latitude longitude local_authority nearest_pc_1 nearest_pc_2
 1   B1 1BB 52.48043 -1.903448      Birmingham      B21 8BQ      B70 7EJ
 ```
-### License
+
+### Distance
+
+The distance in km can also be calulated using `distance = TRUE`:
+
+```r
+# Find the TWO (n=2) postcodes nearest to the council house with distances
+nearest_postcode(df1, df2, n = 2, distance = TRUE)
+```
+
+Returns:
+```
+  postcode latitude longitude local_authority nearest_pc_1 dist_km_1 nearest_pc_2 dist_km_2
+1   B1 1BB 52.48043 -1.903448      Birmingham      B21 8BQ      4.53      B70 7EJ      7.09
+```
+
+## License
 
 This repository is dual licensed under the [Open Government v3]([https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) & MIT. All code can outputs are subject to Crown Copyright.
