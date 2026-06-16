@@ -44,6 +44,47 @@ join_postcode_info <- function(
   )
 }
 
+#' Calculate distances between postcode coordinates
+#'
+#' Internal helper function that approximates the distance in kilometres
+#' between rows of one data frame and selected rows of another data frame
+#' using a local planar approximation.
+#'
+#' @param df1 A data frame containing `latitude` and `longitude` columns.
+#' @param df2 A data frame containing `latitude` and `longitude` columns.
+#' @param index An integer vector giving the rows of `df2` corresponding to
+#'   each row of `df1`.
+#' @param dp Integer specifying the number of decimal places to round the
+#'   resulting distances to. Default is 2.
+#'
+#' @return A numeric vector of distances in kilometres.
+#'
+#' @details
+#' Distances are calculated using a local planar approximation, treating
+#' longitude differences as scaled by the cosine of latitude. This provides
+#' a fast approximation that is sufficiently accurate for the short distances
+#' typically encountered within the West Midlands.
+#'
+#' @keywords internal
+#' @noRd
+calc_dist <- function(
+    df1, 
+    df2,
+    index,
+    dp = 2
+    ){
+  
+  earth_radius_km <- 6371
+  deg_to_km <- pi / 180 * earth_radius_km
+  
+  lat_rad <- df1$latitude * pi / 180
+  
+  dx <- (df1$longitude - df2$longitude[index]) * deg_to_km * cos(lat_rad)
+  dy <- (df1$latitude  - df2$latitude[index])  * deg_to_km
+  
+  round(sqrt(dx^2 + dy^2), dp)
+}
+
 #' Find nearest postcode(s) between two datasets
 #'
 #' For each postcode in `df1`, finds the nearest postcode(s)
@@ -106,13 +147,7 @@ nearest_postcode <- function(
     df1[[paste0("nearest_pc_", i)]] <- df2$postcode[nearest_index]
     
     if (distance) {
-      earth_radius_km <- 6371
-      lat_rad <- df1$latitude * pi / 180
-      
-      dx <- (df1$longitude - df2$longitude[nearest_index]) * pi/180 * earth_radius_km * cos(lat_rad)
-      dy <- (df1$latitude  - df2$latitude[nearest_index])  * pi/180 * earth_radius_km
-      
-      df1[[paste0("dist_km_", i)]] <- round(sqrt(dx^2 + dy^2), 2)
+      df1[[paste0("dist_km_", i)]] <- calc_dist(df1, df2, nearest_index)
     }
 
   }
