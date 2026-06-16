@@ -10,7 +10,7 @@ nearest_postcode(
   df1_pc_col = "postcode",
   df2_pc_col = "postcode",
   n = 1,
-  radius = NULL
+  distance = FALSE
 )
 }
 \arguments{
@@ -24,12 +24,13 @@ nearest_postcode(
 
 \item{n}{Number of nearest neighbours to return.}
 
-\item{radius}{(Optional) Not yet implemented.}
+\item{distance}{Logical. If TRUE, returns distance between postcodes in df1
+and nearest postcodes in df2}
 }
 \value{
 A data frame with additional columns:
 \itemize{
-\item pc1, pc2, ... nearest postcodes in \code{df2}
+\item nearest_pc_1, nearest_pc_2, ... (Optionally) dist_km_1, dist_km_2,...
 }
 }
 \description{
@@ -39,5 +40,5 @@ in \code{df2} using Euclidean distance on latitude/longitude.
 \examples{
 df1 <- data.frame(postcode = "B1 1BB")
 df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD", "B21 8BQ"))
-nearest_postcode(df1, df2, n = 2)
+nearest_postcode(df1, df2, n = 2, distance = TRUE)
 }

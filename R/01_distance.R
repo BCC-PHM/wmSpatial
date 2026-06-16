@@ -54,11 +54,12 @@ join_postcode_info <- function(
 #' @param df1_pc_col Column name of postcodes in `df1`.
 #' @param df2_pc_col Column name of postcodes in `df2`.
 #' @param n Number of nearest neighbours to return.
-#' @param radius (Optional) Not yet implemented.
+#' @param distance Logical. If TRUE, returns distance between postcodes in df1
+#'        and nearest postcodes in df2
 #'
 #' @return A data frame with additional columns:
 #' \itemize{
-#'   \item pc1, pc2, ... nearest postcodes in `df2`
+#'   \item nearest_pc_1, nearest_pc_2, ... (Optionally) dist_km_1, dist_km_2,...
 #' }
 #'
 #' @export
@@ -66,14 +67,14 @@ join_postcode_info <- function(
 #' @examples
 #' df1 <- data.frame(postcode = "B1 1BB")
 #' df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD", "B21 8BQ"))
-#' nearest_postcode(df1, df2, n = 2)
+#' nearest_postcode(df1, df2, n = 2, distance = TRUE)
 nearest_postcode <- function(
     df1,
     df2,
     df1_pc_col = "postcode",
     df2_pc_col = "postcode",
     n = 1,
-    radius = NULL # to be implemented
+    distance = FALSE
 ) {
 
   # get input postcode coordinates
@@ -103,6 +104,16 @@ nearest_postcode <- function(
 
     # Add results to df1
     df1[[paste0("nearest_pc_", i)]] <- df2$postcode[nearest_index]
+    
+    if (distance) {
+      earth_radius_km <- 6371
+      lat_rad <- df1$latitude * pi / 180
+      
+      dx <- (df1$longitude - df2$longitude[nearest_index]) * pi/180 * earth_radius_km * cos(lat_rad)
+      dy <- (df1$latitude  - df2$latitude[nearest_index])  * pi/180 * earth_radius_km
+      
+      df1[[paste0("dist_km_", i)]] <- round(sqrt(dx^2 + dy^2), 2)
+    }
 
   }
 
