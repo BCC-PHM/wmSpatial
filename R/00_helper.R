@@ -19,34 +19,23 @@ clean_postcodes <- function(
   pc_clean <- toupper(gsub("\\s+", "", pc))
   lookup_clean <- toupper(gsub("\\s+", "", wm_postcodes$postcode))
 
-  wm_postcodes$postcode[match(pc_clean, lookup_clean)]
-}
-
-
-#' Validate postcodes against wm_postcodes lookup
-#'
-#' Checks whether all supplied postcodes exist in the wm_postcodes dataset.
-#'
-#' @param pc A character vector of postcodes.
-#'
-#' @return Invisibly returns NULL. Stops if invalid postcodes are found.
-#' @keywords internal
-#' @noRd
-check_postcodes <- function(pc) {
-
-  data("wm_postcodes", envir = environment())
-
-  missing <- pc[!(pc %in% wm_postcodes$postcode)]
-
-  if (length(missing) > 0) {
+  match_elems <- match(pc_clean, lookup_clean)
+  
+  # Check if any missing
+  if (any(is.na(match_elems))) {
+    missing <- pc[is.na(match_elems)]
+    
     stop(
       paste0(
         "The following postcodes were not found in the lookup:\n",
-        paste(missing, collapse = ", ")
+        paste(
+          missing, collapse = ", ")
       ),
       call. = FALSE
     )
   }
-
-  invisible(NULL)
+  
+  return(wm_postcodes$postcode[match_elems])
 }
+
+

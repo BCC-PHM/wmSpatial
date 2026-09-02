@@ -26,9 +26,6 @@ join_postcode_info <- function(
   # Clean postcodes
   df[[df_pc_col]]<- clean_postcodes(df[[df_pc_col]])
 
-  # Check all in lookup
-  check_postcodes(df[[df_pc_col]])
-
   if (strip) {
     # Remove all except postcode column
     df <- df %>%
@@ -107,7 +104,7 @@ calc_dist <- function(
 #'
 #' @examples
 #' df1 <- data.frame(postcode = "B1 1BB")
-#' df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD", "B21 8BQ"))
+#' df2 <- data.frame(postcode = c("B36 9ST", "B96 6DD", "B70 7EJ", "DY8 3YD"))
 #' nearest_postcode(df1, df2, n = 2, distance = TRUE)
 nearest_postcode <- function(
     df1,
