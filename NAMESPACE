@@ -2,3 +2,4 @@
 
 export(join_postcode_info)
 export(nearest_postcode)
+export(prop_in_radius)
