@@ -44,8 +44,6 @@ prop_in_radius <- function(
     df,
     df_pc_col
   )
-  # Check all in lookup
-  check_postcodes(df[[df_pc_col]])
   
   # Load West Mids postcode data
   data("wm_postcodes", envir = environment())
